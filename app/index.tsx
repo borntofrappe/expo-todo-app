@@ -1,5 +1,6 @@
 import AppScreen from "@/components/AppScreen";
-import { FlatList, Text, View } from "react-native";
+import TaskList from "@/components/TaskList";
+import { Text, View } from "react-native";
 
 export default function Index() {
   const tasks: Task[] = [
@@ -37,32 +38,10 @@ export default function Index() {
     <AppScreen>
       <Text className="text-3xl font-light">Tasks</Text>
 
-      <FlatList
-        data={remaining}
-        keyExtractor={(task) => task.id}
-        renderItem={(task) => {
-          const { item } = task;
-          return (
-            <View>
-              <Text>{item.value}</Text>
-            </View>
-          );
-        }}
-      />
+      <TaskList items={remaining} />
       <View>
         <Text>Completed {completed.length}</Text>
-        <FlatList
-          data={completed}
-          keyExtractor={(task) => task.id}
-          renderItem={(task) => {
-            const { item } = task;
-            return (
-              <View>
-                <Text>{item.value}</Text>
-              </View>
-            );
-          }}
-        />
+        <TaskList items={completed} />
       </View>
     </AppScreen>
   );
