@@ -6,12 +6,23 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
+  FadeIn,
+  FadeOut,
+  ReduceMotion,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   WithSpringConfig,
 } from "react-native-reanimated";
+
 import { slate } from "tailwindcss/colors";
+
+const EnteringAnimation = FadeIn.duration(160).reduceMotion(
+  ReduceMotion.System
+);
+const ExitingAnimation = FadeOut.duration(150).reduceMotion(
+  ReduceMotion.System
+);
 
 export default function Index() {
   const [tasks, setTasks] = useState<Task[]>([
@@ -108,19 +119,32 @@ export default function Index() {
         </View>
 
         {mode === "" && (
-          <Pressable
-            onPress={showInput}
-            onPressIn={onPressIn}
-            onPressOut={onPressOut}
+          <Animated.View
+            entering={EnteringAnimation.delay(75)}
+            exiting={ExitingAnimation}
             className="absolute bottom-2 right-3"
           >
-            <Animated.View
-              style={[buttonStyle]}
-              className={"p-2.5 bg-slate-900 rounded-full"}
+            <Pressable
+              onPress={showInput}
+              onPressIn={onPressIn}
+              onPressOut={onPressOut}
             >
-              <Ionicons name="add" color={slate[50]} size={34} />
-            </Animated.View>
-          </Pressable>
+              <Animated.View
+                style={[buttonStyle]}
+                className={"p-2.5 bg-slate-900 rounded-full"}
+              >
+                <Ionicons name="add" color={slate[50]} size={34} />
+              </Animated.View>
+            </Pressable>
+          </Animated.View>
+        )}
+
+        {mode === "input" && (
+          <Animated.View
+            entering={EnteringAnimation}
+            exiting={ExitingAnimation}
+            className="absolute w-full h-full bg-slate-800/10"
+          />
         )}
 
         <TextInputModal
