@@ -55,7 +55,6 @@ export default function Index() {
   };
 
   const handleSubmit = (value: string) => {
-    // add todo
     const task: Task = {
       id: new Date("2025-09-24").getTime().toString(),
       value,
@@ -88,12 +87,56 @@ export default function Index() {
     });
   };
 
+  const toggleItemSelected = (id: string) => {
+    setMode("select");
+    setTasks((tasks) =>
+      tasks.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              selected: !task.selected,
+            }
+          : task
+      )
+    );
+  };
+
   const toggleShowCompleted = () => {
     setShowCompleted((d) => !d);
   };
 
   const handleCheck = (id: string) => {
     toggleItemCompleted(id);
+  };
+
+  const handlePress = (id: string) => {
+    if (mode === "select") {
+      toggleItemSelected(id);
+    }
+  };
+
+  const handleLongPress = (id: string) => {
+    toggleItemSelected(id);
+  };
+
+  const cancelSelection = () => {
+    setMode("");
+    setTasks((tasks) =>
+      tasks.map((task) => ({
+        ...task,
+        selected: false,
+      }))
+    );
+  };
+
+  const toggleSelection = () => {
+    const notAllSelected = !tasks.every((task) => task.selected === true);
+    setTasks((tasks) =>
+      tasks.map((task) => ({
+        ...task,
+        selected: notAllSelected,
+      }))
+    );
   };
 
   const { completed, remaining } = tasks.reduce(
@@ -105,6 +148,11 @@ export default function Index() {
       completed: [],
       remaining: [],
     } as { completed: Task[]; remaining: Task[] }
+  );
+
+  const selectedCount = tasks.reduce(
+    (acc, curr) => (curr.selected ? acc + 1 : acc),
+    0
   );
 
   const buttonScale = useSharedValue(1);
@@ -145,20 +193,46 @@ export default function Index() {
     <AppScreen>
       <View className="relative flex-1">
         <View className="flex-1 px-3 py-3 gap-3">
-          <View className="items-end">
-            <Link href={"/settings"}>
-              <Ionicons name="settings-outline" color={slate[500]} size={24} />
-            </Link>
-          </View>
-          <Text className="text-3xl font-light">Tasks</Text>
+          {mode === "select" ? (
+            <>
+              <View className="flex flex-row justify-between">
+                <Pressable onPress={cancelSelection}>
+                  <Ionicons name="close" color={slate[500]} size={24} />
+                </Pressable>
+                <Pressable onPress={toggleSelection}>
+                  <Ionicons name="list-outline" color={slate[500]} size={24} />
+                </Pressable>
+              </View>
+              <Text className="text-3xl font-light">
+                {selectedCount === 0
+                  ? "Select items"
+                  : `${selectedCount} items selected`}
+              </Text>
+            </>
+          ) : (
+            <>
+              <View className="items-end">
+                <Link href={"/settings"}>
+                  <Ionicons
+                    name="settings-outline"
+                    color={slate[500]}
+                    size={24}
+                  />
+                </Link>
+              </View>
+              <Text className="text-3xl font-light">Tasks</Text>
+            </>
+          )}
 
           {remaining.length > 0 && (
             <>
               <Animated.View entering={EnteringAnimation}>
                 <TaskList
                   items={remaining}
-                  mode={mode}
                   onItemCheck={handleCheck}
+                  onItemPress={handlePress}
+                  onItemLongPress={handleLongPress}
+                  canBeSelected={mode === "select"}
                 />
               </Animated.View>
               <View className="h-2" />
@@ -187,8 +261,10 @@ export default function Index() {
                 <Animated.View entering={EnteringAnimation}>
                   <TaskList
                     items={completed}
-                    mode={mode}
                     onItemCheck={handleCheck}
+                    onItemPress={handlePress}
+                    onItemLongPress={handleLongPress}
+                    canBeSelected={mode === "select"}
                   />
                 </Animated.View>
               )}

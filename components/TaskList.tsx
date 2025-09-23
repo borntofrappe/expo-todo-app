@@ -6,11 +6,19 @@ type IoniconsName = keyof typeof Ionicons.glyphMap;
 
 type Props = {
   items: Task[];
-  mode: Mode;
   onItemCheck: (id: string) => void;
+  onItemPress: (id: string) => void;
+  onItemLongPress: (id: string) => void;
+  canBeSelected?: boolean;
 };
 
-export default function TaskList({ items, mode, onItemCheck }: Props) {
+export default function TaskList({
+  items,
+  onItemCheck,
+  onItemPress,
+  onItemLongPress,
+  canBeSelected,
+}: Props) {
   return (
     <FlatList
       className="overflow-visible"
@@ -31,25 +39,30 @@ export default function TaskList({ items, mode, onItemCheck }: Props) {
         const iconEndColor = item.selected ? sky[500] : slate[500];
 
         return (
-          <View
+          <Pressable
+            onPress={() => {
+              onItemPress(item.id);
+            }}
+            onLongPress={() => {
+              onItemLongPress(item.id);
+            }}
             className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-slate-200 brightness-90 drop-shadow-sm elevation-sm" : "bg-white drop-shadow-md elevation-md"} shadow-slate-300`}
           >
             <Pressable
               onPress={(e) => {
-                e.stopPropagation();
                 onItemCheck(item.id);
               }}
-              className="p-1"
+              className={`p-1 ${canBeSelected && "invisible"}`}
             >
               <Ionicons color={slate[400]} name={iconStart} size={18} />
             </Pressable>
             <Text className={`text-base font-bold ${textStyle}`}>
               {item.value}
             </Text>
-            <View className="ml-auto p-1 invisible">
+            <View className={`ml-auto p-1 ${!canBeSelected && "invisible"}`}>
               <Ionicons color={iconEndColor} name={iconEnd} size={24} />
             </View>
-          </View>
+          </Pressable>
         );
       }}
     />
