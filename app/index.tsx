@@ -144,7 +144,7 @@ export default function Index() {
   return (
     <AppScreen>
       <View className="relative flex-1">
-        <View className="flex-1 px-3 py-3 gap-2">
+        <View className="flex-1 px-3 py-3 gap-3">
           <View className="items-end">
             <Link href={"/settings"}>
               <Ionicons name="settings-outline" color={slate[500]} size={24} />
@@ -152,13 +152,24 @@ export default function Index() {
           </View>
           <Text className="text-3xl font-light">Tasks</Text>
 
-          <TaskList items={remaining} mode={mode} onItemCheck={handleCheck} />
+          {remaining.length > 0 && (
+            <>
+              <Animated.View entering={EnteringAnimation}>
+                <TaskList
+                  items={remaining}
+                  mode={mode}
+                  onItemCheck={handleCheck}
+                />
+              </Animated.View>
+              <View className="h-2" />
+            </>
+          )}
 
           {completed.length > 0 && (
-            <View className="gap-2">
+            <View className="gap-1.5">
               <Pressable
                 onPress={toggleShowCompleted}
-                className="px-1 flex flex-row items-center"
+                className="flex flex-row items-center"
               >
                 <Animated.View style={[chevronStyle]} className="p-1">
                   <Ionicons
@@ -173,11 +184,13 @@ export default function Index() {
               </Pressable>
 
               {showCompleted && (
-                <TaskList
-                  items={completed}
-                  mode={mode}
-                  onItemCheck={handleCheck}
-                />
+                <Animated.View entering={EnteringAnimation}>
+                  <TaskList
+                    items={completed}
+                    mode={mode}
+                    onItemCheck={handleCheck}
+                  />
+                </Animated.View>
               )}
             </View>
           )}
