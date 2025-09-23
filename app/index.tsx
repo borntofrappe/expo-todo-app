@@ -1,7 +1,9 @@
 import AppScreen from "@/components/AppScreen";
 import TaskList from "@/components/TaskList";
+import TextInputModal from "@/components/TextInputModal";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -12,7 +14,7 @@ import Animated, {
 import { slate } from "tailwindcss/colors";
 
 export default function Index() {
-  const tasks: Task[] = [
+  const [tasks, setTasks] = useState<Task[]>([
     {
       id: new Date("2025-09-23").getTime().toString(),
       value: "Init expo app",
@@ -31,7 +33,29 @@ export default function Index() {
       completed: false,
       selected: false,
     },
-  ];
+  ]);
+
+  const [mode, setMode] = useState<Mode>("");
+
+  const showInput = () => {
+    setMode("input");
+  };
+
+  const handleSubmit = (value: string) => {
+    // add todo
+    const task: Task = {
+      id: new Date("2025-09-24").getTime().toString(),
+      value,
+      completed: false,
+      selected: false,
+    };
+    setTasks((tasks) => [task, ...tasks]);
+    setMode("");
+  };
+
+  const handleDismiss = () => {
+    setMode("");
+  };
 
   const { completed, remaining } = tasks.reduce(
     (acc, curr) => {
@@ -83,19 +107,27 @@ export default function Index() {
           </View>
         </View>
 
-        {/*  */}
-        <Pressable
-          onPressIn={onPressIn}
-          onPressOut={onPressOut}
-          className="absolute bottom-2 right-3"
-        >
-          <Animated.View
-            style={[buttonStyle]}
-            className={"p-2.5 bg-slate-900 rounded-full"}
+        {mode === "" && (
+          <Pressable
+            onPress={showInput}
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
+            className="absolute bottom-2 right-3"
           >
-            <Ionicons name="add" color={slate[50]} size={34} />
-          </Animated.View>
-        </Pressable>
+            <Animated.View
+              style={[buttonStyle]}
+              className={"p-2.5 bg-slate-900 rounded-full"}
+            >
+              <Ionicons name="add" color={slate[50]} size={34} />
+            </Animated.View>
+          </Pressable>
+        )}
+
+        <TextInputModal
+          visible={mode === "input"}
+          onSubmit={handleSubmit}
+          onDismiss={handleDismiss}
+        />
       </View>
     </AppScreen>
   );

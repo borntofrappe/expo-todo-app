@@ -8,3 +8,5 @@ type Task = Pick<Todo, "id" | "value"> & {
   completed: boolean;
   selected: boolean;
 };
+
+type Mode = "" | "input";
