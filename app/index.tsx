@@ -4,7 +4,7 @@ import TextInputModal from "@/components/TextInputModal";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -18,10 +18,9 @@ import Animated, {
 
 import { slate } from "tailwindcss/colors";
 
-const EnteringAnimation = FadeIn.duration(160).reduceMotion(
-  ReduceMotion.System
-);
-const ExitingAnimation = FadeOut.duration(150).reduceMotion(
+const FadeInAnimation = FadeIn.duration(160).reduceMotion(ReduceMotion.System);
+
+const FadeOutAnimation = FadeOut.duration(160).reduceMotion(
   ReduceMotion.System
 );
 
@@ -226,7 +225,7 @@ export default function Index() {
 
           {remaining.length > 0 && (
             <>
-              <Animated.View entering={EnteringAnimation}>
+              <Animated.View entering={FadeInAnimation}>
                 <TaskList
                   items={remaining}
                   onItemCheck={handleCheck}
@@ -258,7 +257,7 @@ export default function Index() {
               </Pressable>
 
               {showCompleted && (
-                <Animated.View entering={EnteringAnimation}>
+                <Animated.View entering={FadeInAnimation}>
                   <TaskList
                     items={completed}
                     onItemCheck={handleCheck}
@@ -274,8 +273,8 @@ export default function Index() {
 
         {mode === "" && (
           <Animated.View
-            entering={EnteringAnimation.delay(75)}
-            exiting={ExitingAnimation}
+            entering={FadeInAnimation.delay(75)}
+            exiting={FadeOutAnimation}
             className="absolute bottom-2 right-3"
           >
             <Pressable
@@ -293,10 +292,34 @@ export default function Index() {
           </Animated.View>
         )}
 
+        {mode === "select" && (
+          <Animated.View entering={FadeInAnimation} exiting={FadeOutAnimation}>
+            {/* same bg as scene */}
+            <View className="absolute w-full px-2 py-4 bottom-0 bg-slate-50">
+              <TouchableOpacity
+                disabled={selectedCount === 0}
+                activeOpacity={0.6}
+                onPress={() => {
+                  if (selectedCount === 0) return;
+
+                  // handle deletion
+                }}
+              >
+                <View
+                  className={`margin-auto flex gap-1 items-center ${selectedCount === 0 ? "opacity-50" : ""}`}
+                >
+                  <Ionicons name="trash-bin-outline" size={24} />
+                  <Text className="text-xs text-slate-700">Delete</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        )}
+
         {mode === "input" && (
           <Animated.View
-            entering={EnteringAnimation}
-            exiting={ExitingAnimation}
+            entering={FadeInAnimation}
+            exiting={FadeOutAnimation}
             className="absolute w-full h-full bg-slate-800/10"
           />
         )}
