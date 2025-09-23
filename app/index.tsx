@@ -2,7 +2,13 @@ import AppScreen from "@/components/AppScreen";
 import TaskList from "@/components/TaskList";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  WithSpringConfig,
+} from "react-native-reanimated";
 import { slate } from "tailwindcss/colors";
 
 export default function Index() {
@@ -38,21 +44,58 @@ export default function Index() {
     } as { completed: Task[]; remaining: Task[] }
   );
 
+  const buttonScale = useSharedValue(1);
+
+  const buttonSpringConfig: WithSpringConfig = {
+    damping: 0.1,
+    stiffness: 200,
+  };
+
+  const onPressIn = () => {
+    buttonScale.value = withSpring(0.9, buttonSpringConfig);
+  };
+
+  const onPressOut = () => {
+    buttonScale.value = withSpring(1, buttonSpringConfig);
+  };
+
+  const buttonStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: buttonScale.value }],
+    };
+  });
+
   return (
     <AppScreen>
-      <View className="flex-1 px-3 py-3 gap-3">
-        <View className="items-end">
-          <Link href={"/settings"}>
-            <Ionicons name="settings-outline" color={slate[500]} size={24} />
-          </Link>
-        </View>
-        <Text className="text-3xl font-light">Tasks</Text>
+      <View className="relative flex-1">
+        <View className="flex-1 px-3 py-3 gap-3">
+          <View className="items-end">
+            <Link href={"/settings"}>
+              <Ionicons name="settings-outline" color={slate[500]} size={24} />
+            </Link>
+          </View>
+          <Text className="text-3xl font-light">Tasks</Text>
 
-        <TaskList items={remaining} />
-        <View>
-          <Text>Completed {completed.length}</Text>
-          <TaskList items={completed} />
+          <TaskList items={remaining} />
+          <View>
+            <Text>Completed {completed.length}</Text>
+            <TaskList items={completed} />
+          </View>
         </View>
+
+        {/*  */}
+        <Pressable
+          onPressIn={onPressIn}
+          onPressOut={onPressOut}
+          className="absolute bottom-2 right-3"
+        >
+          <Animated.View
+            style={[buttonStyle]}
+            className={"p-2.5 bg-slate-900 rounded-full"}
+          >
+            <Ionicons name="add" color={slate[50]} size={34} />
+          </Animated.View>
+        </Pressable>
       </View>
     </AppScreen>
   );
