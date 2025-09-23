@@ -68,6 +68,28 @@ export default function Index() {
     setMode("");
   };
 
+  const toggleItemCompleted = (id: string) => {
+    const index = tasks.findIndex((task) => task.id === id);
+    if (index === -1) return;
+
+    const { completed } = tasks[index];
+
+    setTasks((tasks) => {
+      return [
+        {
+          ...tasks[index],
+          completed: !completed,
+        },
+        ...tasks.slice(0, index),
+        ...tasks.slice(index + 1),
+      ];
+    });
+  };
+
+  const handleCheck = (id: string) => {
+    toggleItemCompleted(id);
+  };
+
   const { completed, remaining } = tasks.reduce(
     (acc, curr) => {
       acc[curr.completed === true ? "completed" : "remaining"].push(curr);
@@ -103,7 +125,7 @@ export default function Index() {
   return (
     <AppScreen>
       <View className="relative flex-1">
-        <View className="flex-1 px-3 py-3 gap-3">
+        <View className="flex-1 px-3 py-3 gap-2">
           <View className="items-end">
             <Link href={"/settings"}>
               <Ionicons name="settings-outline" color={slate[500]} size={24} />
@@ -111,10 +133,10 @@ export default function Index() {
           </View>
           <Text className="text-3xl font-light">Tasks</Text>
 
-          <TaskList items={remaining} />
+          <TaskList items={remaining} mode={mode} onItemCheck={handleCheck} />
           <View>
             <Text>Completed {completed.length}</Text>
-            <TaskList items={completed} />
+            <TaskList items={completed} mode={mode} onItemCheck={handleCheck} />
           </View>
         </View>
 
