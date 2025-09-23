@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import AppScreen from "@/components/AppScreen";
+import { Text } from "react-native";
 
 export default function Index() {
   return (
-    <View className="flex-1 w-full max-w-[600px] mx-auto">
+    <AppScreen>
       <Text className="text-3xl font-light">Tasks</Text>
-    </View>
+    </AppScreen>
   );
 }

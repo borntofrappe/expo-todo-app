@@ -14,7 +14,7 @@
 
 - (modals animated by react native)
 
-- slide transition between the two tabs
+- ~slide transition between the two tabs~
 
 - entering / exiting animation for the add button
 

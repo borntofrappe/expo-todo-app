@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import AppScreen from "@/components/AppScreen";
+import { Text } from "react-native";
 
 export default function Settings() {
   return (
-    <View className="flex-1 w-full max-w-[600px] mx-auto">
+    <AppScreen>
       <Text className="text-3xl font-light">Settings</Text>
-    </View>
+    </AppScreen>
   );
 }
