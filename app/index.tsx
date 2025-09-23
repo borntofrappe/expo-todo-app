@@ -1,4 +1,5 @@
 import AppScreen from "@/components/AppScreen";
+import DangerModal from "@/components/DangerModal";
 import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
 import { Ionicons } from "@expo/vector-icons";
@@ -48,6 +49,7 @@ export default function Index() {
 
   const [mode, setMode] = useState<Mode>("");
   const [showCompleted, setShowCompleted] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const showInput = () => {
     setMode("input");
@@ -136,6 +138,18 @@ export default function Index() {
         selected: notAllSelected,
       }))
     );
+  };
+
+  const deleteSelected = () => {
+    setTasks((tasks) => tasks.filter((task) => task.selected === false));
+    setShowDeleteModal(false);
+    setMode("");
+  };
+
+  const handleDeletion = () => {
+    if (selectedCount === 0) return;
+
+    setShowDeleteModal(true);
   };
 
   const { completed, remaining } = tasks.reduce(
@@ -299,11 +313,7 @@ export default function Index() {
               <TouchableOpacity
                 disabled={selectedCount === 0}
                 activeOpacity={0.6}
-                onPress={() => {
-                  if (selectedCount === 0) return;
-
-                  // handle deletion
-                }}
+                onPress={handleDeletion}
               >
                 <View
                   className={`margin-auto flex gap-1 items-center ${selectedCount === 0 ? "opacity-50" : ""}`}
@@ -328,6 +338,20 @@ export default function Index() {
           visible={mode === "input"}
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
+        />
+
+        <DangerModal
+          visible={showDeleteModal}
+          onDismiss={() => {
+            setShowDeleteModal(false);
+          }}
+          onCancel={() => {
+            setShowDeleteModal(false);
+          }}
+          onAction={deleteSelected}
+          title="Delete completed tasks"
+          prompt={`Delete ${selectedCount === 1 ? "1 task" : `${selectedCount} tasks`}?`}
+          action="Delete"
         />
       </View>
     </AppScreen>
