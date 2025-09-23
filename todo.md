@@ -25,3 +25,8 @@
 - native wind
 
 - light dark mode
+
+<!--
+npx expo start --web
+npx expo start --clear --tunnel
+ -->

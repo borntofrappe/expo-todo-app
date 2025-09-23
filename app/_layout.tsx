@@ -15,7 +15,7 @@ export default function TabsLayout() {
         },
         headerShown: false,
         tabBarStyle: {
-          // display: "none", // uncomment when handling navigation between the two tabs
+          display: "none", // uncomment when handling navigation between the two tabs
         },
         transitionSpec: {
           animation: "timing",
