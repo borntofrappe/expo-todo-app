@@ -3,7 +3,7 @@ import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
   FadeIn,
@@ -13,6 +13,7 @@ import Animated, {
   useSharedValue,
   withSpring,
   WithSpringConfig,
+  withTiming,
 } from "react-native-reanimated";
 
 import { slate } from "tailwindcss/colors";
@@ -47,6 +48,7 @@ export default function Index() {
   ]);
 
   const [mode, setMode] = useState<Mode>("");
+  const [showCompleted, setShowCompleted] = useState(false);
 
   const showInput = () => {
     setMode("input");
@@ -86,6 +88,10 @@ export default function Index() {
     });
   };
 
+  const toggleShowCompleted = () => {
+    setShowCompleted((d) => !d);
+  };
+
   const handleCheck = (id: string) => {
     toggleItemCompleted(id);
   };
@@ -122,6 +128,19 @@ export default function Index() {
     };
   });
 
+  const chevronRotation = useSharedValue(0);
+  const chevronStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotate: `${chevronRotation.value}deg` }],
+    };
+  });
+
+  useEffect(() => {
+    chevronRotation.value = withTiming(showCompleted ? -180 : 0, {
+      duration: 180,
+    });
+  }, [showCompleted, chevronRotation]);
+
   return (
     <AppScreen>
       <View className="relative flex-1">
@@ -134,10 +153,34 @@ export default function Index() {
           <Text className="text-3xl font-light">Tasks</Text>
 
           <TaskList items={remaining} mode={mode} onItemCheck={handleCheck} />
-          <View>
-            <Text>Completed {completed.length}</Text>
-            <TaskList items={completed} mode={mode} onItemCheck={handleCheck} />
-          </View>
+
+          {completed.length > 0 && (
+            <View className="gap-2">
+              <Pressable
+                onPress={toggleShowCompleted}
+                className="px-1 flex flex-row items-center"
+              >
+                <Animated.View style={[chevronStyle]} className="p-1">
+                  <Ionicons
+                    className="text-slate-400"
+                    name="chevron-down"
+                    size={18}
+                  />
+                </Animated.View>
+                <Text className="text-slate-400 text-sm font-semibold">
+                  Completed {completed.length}
+                </Text>
+              </Pressable>
+
+              {showCompleted && (
+                <TaskList
+                  items={completed}
+                  mode={mode}
+                  onItemCheck={handleCheck}
+                />
+              )}
+            </View>
+          )}
         </View>
 
         {mode === "" && (
