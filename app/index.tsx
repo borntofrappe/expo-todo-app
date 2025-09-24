@@ -25,6 +25,8 @@ const FadeOutAnimation = FadeOut.duration(160).reduceMotion(
   ReduceMotion.System
 );
 
+const getNewId = () => new Date().getTime().toString();
+
 export default function Index() {
   const [tasks, setTasks] = useState<Task[]>([
     {
@@ -57,7 +59,7 @@ export default function Index() {
 
   const handleSubmit = (value: string) => {
     const task: Task = {
-      id: new Date("2025-09-24").getTime().toString(),
+      id: getNewId(),
       value,
       completed: false,
       selected: false,
