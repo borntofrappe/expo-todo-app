@@ -78,7 +78,7 @@ function TaskItem({
   const iconEnd: IoniconsName = item.selected
     ? "checkmark-circle"
     : "checkmark-circle-outline";
-  const iconEndColor = item.selected ? sky[500] : slate[500];
+  const iconEndColor = item.selected ? sky[400] : slate[500];
 
   return (
     <Pressable
@@ -94,7 +94,7 @@ function TaskItem({
     >
       <Animated.View style={[itemStyle]}>
         <View
-          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-slate-200 brightness-90 drop-shadow-sm elevation-sm" : "bg-white drop-shadow-md elevation-md"} shadow-slate-300`}
+          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-slate-200 drop-shadow-sm elevation-sm" : "bg-white drop-shadow-md elevation-md"} shadow-slate-300`}
         >
           <Pressable
             onPress={(e) => {

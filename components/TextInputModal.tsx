@@ -63,7 +63,7 @@ export default function TextInputModal({
             className="ml-auto"
           >
             <Text
-              className={`font-bold ${value === "" ? "text-slate-400" : "text-sky-500"}`}
+              className={`font-bold ${value === "" ? "text-slate-400" : "text-sky-400"}`}
             >
               Done
             </Text>

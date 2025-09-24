@@ -17,7 +17,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { slate } from "tailwindcss/colors";
+import { sky, slate } from "tailwindcss/colors";
 
 const FadeInAnimation = FadeIn.duration(160).reduceMotion(ReduceMotion.System);
 
@@ -298,9 +298,9 @@ export default function Index() {
             >
               <Animated.View
                 style={[buttonStyle]}
-                className={"p-2.5 bg-slate-900 rounded-full"}
+                className={"p-2.5 bg-sky-400 rounded-full"}
               >
-                <Ionicons name="add" color={slate[50]} size={34} />
+                <Ionicons name="add" color={sky[50]} size={34} />
               </Animated.View>
             </Pressable>
           </Animated.View>

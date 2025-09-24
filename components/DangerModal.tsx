@@ -43,14 +43,14 @@ export default function DangerModal({
               className="bg-slate-100 px-8 py-3 rounded-xl"
               onPress={onCancel}
             >
-              <Text className="font-bold text-slate-800">Cancel</Text>
+              <Text className="font-bold text-slate-700">Cancel</Text>
             </TouchableHighlight>
             <TouchableHighlight
               underlayColor={slate[200]}
               className="bg-slate-100 px-8 py-3 rounded-xl"
               onPress={onAction}
             >
-              <Text className="font-semibold text-red-600">{action}</Text>
+              <Text className="font-bold text-red-700">{action}</Text>
             </TouchableHighlight>
           </View>
         </View>
