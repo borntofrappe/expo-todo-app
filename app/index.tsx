@@ -5,6 +5,7 @@ import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -29,26 +30,24 @@ const FadeOutAnimation = FadeOut.duration(160).reduceMotion(
 const getNewId = () => new Date().getTime().toString();
 
 export default function Index() {
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: new Date("2025-09-23").getTime().toString(),
-      value: "Init expo app",
-      completed: true,
-      selected: false,
-    },
-    {
-      id: new Date("2025-09-24").getTime().toString(),
-      value: "Install libs",
-      completed: true,
-      selected: false,
-    },
-    {
-      id: new Date("2025-09-30").getTime().toString(),
-      value: "Finish app",
-      completed: false,
-      selected: false,
-    },
-  ]);
+  const db = useSQLiteContext();
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const todos = await db.getAllAsync<Todo>(
+        "SELECT id, value, completed FROM todos"
+      );
+      console.log(todos);
+      setTasks(
+        todos.map((todo) => ({
+          ...todo,
+          completed: todo.completed === 1,
+          selected: false,
+        }))
+      );
+    })();
+  }, []);
 
   const [mode, setMode] = useState<Mode>("");
   const [showCompleted, setShowCompleted] = useState(false);
@@ -58,14 +57,19 @@ export default function Index() {
     setMode("input");
   };
 
-  const handleSubmit = (value: string) => {
-    const task: Task = {
-      id: getNewId(),
-      value,
-      completed: false,
-      selected: false,
-    };
-    setTasks((tasks) => [task, ...tasks]);
+  const handleSubmit = async (value: string) => {
+    const id = getNewId();
+    await db.runAsync("INSERT INTO todos (id, value) VALUES (?, ?)", id, value);
+
+    setTasks((tasks) => [
+      {
+        id,
+        value,
+        completed: false,
+        selected: false,
+      },
+      ...tasks,
+    ]);
     setMode("");
   };
 
@@ -73,11 +77,17 @@ export default function Index() {
     setMode("");
   };
 
-  const toggleItemCompleted = (id: string) => {
+  const toggleItemCompleted = async (id: string) => {
     const index = tasks.findIndex((task) => task.id === id);
     if (index === -1) return;
 
     const { completed } = tasks[index];
+
+    await db.runAsync(
+      "UPDATE todos SET completed = ? WHERE id = ?",
+      !completed,
+      id
+    );
 
     setTasks((tasks) => {
       return [
@@ -143,7 +153,15 @@ export default function Index() {
     );
   };
 
-  const deleteSelected = () => {
+  const deleteSelected = async () => {
+    const ids = tasks
+      .filter((task) => task.selected === true)
+      .map((task) => task.id);
+
+    const placeholders = ids.map(() => "?").join(", ");
+
+    await db.runAsync(`DELETE FROM todos WHERE id IN (${placeholders});`, ids);
+
     setTasks((tasks) => tasks.filter((task) => task.selected === false));
     setShowDeleteModal(false);
     setMode("");
