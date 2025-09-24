@@ -2,8 +2,6 @@
 
 A basic todo application with two screens.
 
-- sqlite storage
-
 - light dark mode
 
 - font-size magnifier
