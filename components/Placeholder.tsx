@@ -18,8 +18,8 @@ export default function Placeholder() {
 function PlaceholderRow() {
   return (
     <View className="flex flex-row gap-1 items-center">
-      <Ionicons name="checkmark-circle-outline" size={24} color="white" />
-      <View className="w-7 h-1 rounded-sm bg-white" />
+      <Ionicons name="checkmark-circle-outline" size={26} color="white" />
+      <View className="w-5 h-0.5 rounded-sm bg-white" />
     </View>
   );
 }

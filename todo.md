@@ -10,8 +10,6 @@ A basic todo application with two screens.
 
 - async storage for app preferences
 
-- placeholder graphic
-
 <!--
 npx expo start --web
 npx expo start --clear --tunnel
