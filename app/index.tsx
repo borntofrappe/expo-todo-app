@@ -38,7 +38,6 @@ export default function Index() {
       const todos = await db.getAllAsync<Todo>(
         "SELECT id, value, completed FROM todos"
       );
-      console.log(todos);
       setTasks(
         todos.map((todo) => ({
           ...todo,
@@ -259,9 +258,13 @@ export default function Index() {
           )}
 
           {remaining.length + completed.length === 0 && (
-            <View className="flex-[0.67] justify-center items-center">
+            <Animated.View
+              entering={FadeInAnimation}
+              exiting={FadeOutAnimation}
+              className="flex-[0.67] justify-center items-center"
+            >
               <Placeholder />
-            </View>
+            </Animated.View>
           )}
 
           {remaining.length > 0 && (
