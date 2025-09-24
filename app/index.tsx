@@ -1,5 +1,6 @@
 import AppScreen from "@/components/AppScreen";
 import DangerModal from "@/components/DangerModal";
+import Placeholder from "@/components/Placeholder";
 import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
 import { Ionicons } from "@expo/vector-icons";
@@ -237,6 +238,12 @@ export default function Index() {
               </View>
               <Text className="text-3xl font-light">Tasks</Text>
             </>
+          )}
+
+          {remaining.length + completed.length === 0 && (
+            <View className="flex-[0.67] justify-center items-center">
+              <Placeholder />
+            </View>
           )}
 
           {remaining.length > 0 && (
