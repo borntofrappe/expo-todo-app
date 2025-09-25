@@ -3,6 +3,12 @@ import DangerModal from "@/components/DangerModal";
 import Placeholder from "@/components/Placeholder";
 import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
+import {
+  addTodo,
+  deleteTodos,
+  getAllTodos,
+  toggleTodoCompleted,
+} from "@/database/queries";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
@@ -27,17 +33,13 @@ const FadeOutAnimation = FadeOut.duration(160).reduceMotion(
   ReduceMotion.System
 );
 
-const getNewId = () => new Date().getTime().toString();
-
 export default function Index() {
   const db = useSQLiteContext();
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     (async () => {
-      const todos = await db.getAllAsync<Todo>(
-        "SELECT id, value, completed FROM todos"
-      );
+      const todos = await getAllTodos(db);
       setTasks(
         todos.map((todo) => ({
           ...todo,
@@ -57,14 +59,12 @@ export default function Index() {
   };
 
   const handleSubmit = async (value: string) => {
-    const id = getNewId();
-    await db.runAsync("INSERT INTO todos (id, value) VALUES (?, ?)", id, value);
+    const todo = await addTodo(db, value);
 
     setTasks((tasks) => [
       {
-        id,
-        value,
-        completed: false,
+        ...todo,
+        completed: todo.completed === 1,
         selected: false,
       },
       ...tasks,
@@ -80,19 +80,17 @@ export default function Index() {
     const index = tasks.findIndex((task) => task.id === id);
     if (index === -1) return;
 
-    const { completed } = tasks[index];
-
-    await db.runAsync(
-      "UPDATE todos SET completed = ? WHERE id = ?",
-      !completed,
-      id
+    const { completed } = await toggleTodoCompleted(
+      db,
+      id,
+      tasks[index].completed
     );
 
     setTasks((tasks) => {
       return [
         {
           ...tasks[index],
-          completed: !completed,
+          completed,
         },
         ...tasks.slice(0, index),
         ...tasks.slice(index + 1),
@@ -153,15 +151,13 @@ export default function Index() {
   };
 
   const deleteSelected = async () => {
-    const ids = tasks
+    const selectedIDs = tasks
       .filter((task) => task.selected === true)
       .map((task) => task.id);
 
-    const placeholders = ids.map(() => "?").join(", ");
+    const ids = await deleteTodos(db, selectedIDs);
 
-    await db.runAsync(`DELETE FROM todos WHERE id IN (${placeholders});`, ids);
-
-    setTasks((tasks) => tasks.filter((task) => task.selected === false));
+    setTasks((tasks) => tasks.filter((task) => !ids.includes(task.id)));
     setShowDeleteModal(false);
     setMode("");
   };
