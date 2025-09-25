@@ -46,14 +46,14 @@ export default function TextInputModal({
           onPointerDown={(e) => {
             e.stopPropagation();
           }}
-          className="mx-2 mb-3 px-4 py-4 gap-4 bg-white shadow-lg elevation-sm-lg shadow-slate-200 rounded-lg"
+          className="mx-2 mb-3 px-4 py-4 gap-4 bg-background--1 shadow-lg elevation-sm-lg shadow-shadow-1 rounded-lg"
         >
           <TextInput
             onSubmitEditing={submit}
             onChangeText={setValue}
             value={value}
             ref={textInputRef}
-            className="px-1 py-1 outline-none text-base text-slate-800"
+            className="px-1 py-1 outline-none text-base text-color-1"
             placeholder="New task..."
           />
 
@@ -63,7 +63,7 @@ export default function TextInputModal({
             className="ml-auto"
           >
             <Text
-              className={`font-bold ${value === "" ? "text-slate-400" : "text-sky-400"}`}
+              className={`font-bold ${value === "" ? "text-color-empty" : "text-color-theme"}`}
             >
               Done
             </Text>

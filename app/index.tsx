@@ -26,8 +26,6 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { sky, slate } from "tailwindcss/colors";
-
 const FadeInAnimation = FadeIn.duration(160).reduceMotion(ReduceMotion.System);
 
 const FadeOutAnimation = FadeOut.duration(160).reduceMotion(
@@ -262,13 +260,17 @@ export default function Index() {
             <>
               <View className="flex flex-row justify-between">
                 <Pressable onPress={cancelSelection}>
-                  <Ionicons name="close" color={slate[500]} size={24} />
+                  <Ionicons className="text-icon-1" name="close" size={24} />
                 </Pressable>
                 <Pressable onPress={toggleSelection}>
-                  <Ionicons name="list-outline" color={slate[500]} size={24} />
+                  <Ionicons
+                    className="text-icon-1"
+                    name="list-outline"
+                    size={24}
+                  />
                 </Pressable>
               </View>
-              <Text className="text-3xl font-light">
+              <Text className="text-3xl font-light text-color-1">
                 {selectedCount === 0
                   ? "Select items"
                   : `${selectedCount} items selected`}
@@ -279,13 +281,13 @@ export default function Index() {
               <View className="items-end">
                 <Link href={"/settings"}>
                   <Ionicons
+                    className="text-icon-1"
                     name="settings-outline"
-                    color={slate[500]}
                     size={24}
                   />
                 </Link>
               </View>
-              <Text className="text-3xl font-light">Tasks</Text>
+              <Text className="text-3xl font-light text-color-1">Tasks</Text>
             </>
           )}
 
@@ -322,12 +324,12 @@ export default function Index() {
               >
                 <Animated.View style={[detailsStyle]} className="p-1">
                   <Ionicons
-                    className="text-slate-400"
+                    className="text-icon-2"
                     name="chevron-down"
                     size={18}
                   />
                 </Animated.View>
-                <Text className="text-slate-400 text-sm font-semibold">
+                <Text className="text-icon-2 text-sm font-semibold">
                   Completed {completed.length}
                 </Text>
               </Pressable>
@@ -364,9 +366,9 @@ export default function Index() {
             >
               <Animated.View
                 style={[fabStyle]}
-                className={"p-2.5 bg-sky-400 rounded-full"}
+                className={"p-2.5 bg-background-fab rounded-full"}
               >
-                <Ionicons name="add" color={sky[50]} size={34} />
+                <Ionicons className="text-color-fab" name="add" size={34} />
               </Animated.View>
             </Pressable>
           </Animated.View>
@@ -375,17 +377,21 @@ export default function Index() {
         {mode === "select" && (
           <Animated.View entering={FadeInAnimation} exiting={FadeOutAnimation}>
             {/* same bg as scene */}
-            <View className="absolute w-full px-2 py-4 bottom-0 bg-slate-50">
+            <View className="absolute w-full px-2 py-4 bottom-0 bg-background-1">
               <TouchableOpacity
                 disabled={selectedCount === 0}
                 activeOpacity={0.6}
                 onPress={handleDeletion}
               >
                 <View
-                  className={`margin-auto flex gap-1 items-center ${selectedCount === 0 ? "opacity-50" : ""}`}
+                  className={`margin-auto flex gap-1.5 items-center ${selectedCount === 0 ? "opacity-50" : ""}`}
                 >
-                  <Ionicons name="trash-bin-outline" size={24} />
-                  <Text className="text-xs text-slate-700">Delete</Text>
+                  <Ionicons
+                    className="text-xs text-color-2"
+                    name="trash-bin-outline"
+                    size={24}
+                  />
+                  <Text className="text-xs text-color-2">Delete</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -396,7 +402,7 @@ export default function Index() {
           <Animated.View
             entering={FadeInAnimation}
             exiting={FadeOutAnimation}
-            className="absolute w-full h-full bg-slate-800/10"
+            className="absolute w-full h-full bg-background-modal"
           />
         )}
 

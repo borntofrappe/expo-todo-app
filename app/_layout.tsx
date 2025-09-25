@@ -1,20 +1,15 @@
-import { Tabs } from "expo-router";
-import { Dimensions } from "react-native";
-import { gray } from "tailwindcss/colors";
-import "../styles/global.css";
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { initDB } from "@/database/queries";
+import { Tabs } from "expo-router";
+import { SQLiteProvider } from "expo-sqlite";
+import { Dimensions } from "react-native";
+import "../styles/global.css";
 export default function TabsLayout() {
-  const backgroundColor = gray[50];
   const transitionDuration = 280;
 
   return (
     <SQLiteProvider databaseName="todos.db" onInit={initDB}>
       <Tabs
         screenOptions={{
-          sceneStyle: {
-            backgroundColor,
-          },
           headerShown: false,
           tabBarStyle: {
             display: "none", // uncomment when handling navigation between the two tabs

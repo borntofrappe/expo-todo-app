@@ -5,7 +5,6 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { sky, slate } from "tailwindcss/colors";
 
 type IoniconsName = keyof typeof Ionicons.glyphMap;
 
@@ -71,14 +70,14 @@ function TaskItem({
       transform: [{ scale: itemScale.value }],
     };
   });
-  const textStyle = item.completed ? "text-slate-400" : "text-slate-700";
+  const textStyle = item.completed ? "text-color-empty" : "text-color-2";
   const iconStart: IoniconsName = item.completed
     ? "checkbox"
     : "square-outline";
   const iconEnd: IoniconsName = item.selected
     ? "checkmark-circle"
     : "checkmark-circle-outline";
-  const iconEndColor = item.selected ? sky[400] : slate[500];
+  const iconEndStyle = item.selected ? "text-color-theme" : "text-icon-1";
 
   return (
     <Pressable
@@ -94,7 +93,7 @@ function TaskItem({
     >
       <Animated.View style={[itemStyle]}>
         <View
-          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-slate-200 drop-shadow-sm elevation-sm" : "bg-white drop-shadow-md elevation-md"} shadow-slate-300`}
+          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-background-3 drop-shadow-sm elevation-sm" : "bg-background--1 drop-shadow-md elevation-md"} shadow-shadow-1`}
         >
           <Pressable
             onPress={(e) => {
@@ -102,13 +101,13 @@ function TaskItem({
             }}
             className={`p-1 ${canBeSelected && "invisible"}`}
           >
-            <Ionicons color={slate[400]} name={iconStart} size={18} />
+            <Ionicons className="text-icon-1" name={iconStart} size={18} />
           </Pressable>
           <Text className={`text-base font-bold ${textStyle}`}>
             {item.value}
           </Text>
           <View className={`ml-auto p-1 ${!canBeSelected && "invisible"}`}>
-            <Ionicons color={iconEndColor} name={iconEnd} size={24} />
+            <Ionicons className={iconEndStyle} name={iconEnd} size={24} />
           </View>
         </View>
       </Animated.View>
