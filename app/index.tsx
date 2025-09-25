@@ -38,8 +38,8 @@ export default function Index() {
   const db = useSQLiteContext();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
-
   const [mode, setMode] = useState<Mode>("");
+
   const [showCompleted, setShowCompleted] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -56,11 +56,36 @@ export default function Index() {
     })();
   }, []);
 
-  const showInput = () => {
-    setMode("input");
+  const fabScale = useSharedValue(1);
+  const fabStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: fabScale.value }],
+    };
+  });
+
+  const fabSpringConfig: WithSpringConfig = {
+    damping: 0.1,
+    stiffness: 200,
   };
 
-  const addNewTask = async (value: string) => {
+  const animateFabScale = (toValue: number) => {
+    fabScale.value = withSpring(toValue, fabSpringConfig);
+  };
+
+  const details = useSharedValue(0);
+  const detailsStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotate: `${details.value}deg` }],
+    };
+  });
+
+  useEffect(() => {
+    details.value = withTiming(showCompleted ? -180 : 0, {
+      duration: 180,
+    });
+  }, [showCompleted, details]);
+
+  const addTask = async (value: string) => {
     const todo = await addTodo(db, value);
 
     setTasks((tasks) => [
@@ -89,27 +114,6 @@ export default function Index() {
         )
       );
     }
-  };
-
-  const handleSubmit = async (value: string) => {
-    if (value === "") {
-      setMode("");
-      return;
-    }
-
-    if (currentTask === undefined) {
-      addNewTask(value);
-    } else {
-      editCurrentTask(value);
-      setCurrentTask(undefined);
-    }
-
-    setMode("");
-  };
-
-  const handleDismiss = () => {
-    setCurrentTask(undefined);
-    setMode("");
   };
 
   const toggleTaskCompleted = async (id: string) => {
@@ -153,24 +157,6 @@ export default function Index() {
     setShowCompleted((d) => !d);
   };
 
-  const handleCheck = (id: string) => {
-    toggleTaskCompleted(id);
-  };
-
-  const handlePress = (id: string) => {
-    if (mode === "select") {
-      toggleTaskSelected(id);
-    } else {
-      const task = tasks.find((task) => task.id === id);
-      setCurrentTask(task);
-      setMode("input");
-    }
-  };
-
-  const handleLongPress = (id: string) => {
-    toggleTaskSelected(id);
-  };
-
   const cancelSelection = () => {
     setMode("");
     setTasks((tasks) =>
@@ -203,6 +189,49 @@ export default function Index() {
     setMode("");
   };
 
+  const handleFabPress = () => {
+    setMode("input");
+  };
+
+  const handleSubmit = async (value: string) => {
+    if (value === "") {
+      setMode("");
+      return;
+    }
+
+    if (currentTask === undefined) {
+      addTask(value);
+    } else {
+      editCurrentTask(value);
+      setCurrentTask(undefined);
+    }
+
+    setMode("");
+  };
+
+  const handleDismiss = () => {
+    setCurrentTask(undefined);
+    setMode("");
+  };
+
+  const handleItemCheck = (id: string) => {
+    toggleTaskCompleted(id);
+  };
+
+  const handleItemPress = (id: string) => {
+    if (mode === "select") {
+      toggleTaskSelected(id);
+    } else {
+      const task = tasks.find((task) => task.id === id);
+      setCurrentTask(task);
+      setMode("input");
+    }
+  };
+
+  const handleItemLongPress = (id: string) => {
+    toggleTaskSelected(id);
+  };
+
   const handleDeletion = () => {
     if (selectedCount === 0) return;
 
@@ -224,40 +253,6 @@ export default function Index() {
     (acc, curr) => (curr.selected ? acc + 1 : acc),
     0
   );
-
-  const buttonScale = useSharedValue(1);
-
-  const buttonSpringConfig: WithSpringConfig = {
-    damping: 0.1,
-    stiffness: 200,
-  };
-
-  const onPressIn = () => {
-    buttonScale.value = withSpring(0.9, buttonSpringConfig);
-  };
-
-  const onPressOut = () => {
-    buttonScale.value = withSpring(1, buttonSpringConfig);
-  };
-
-  const buttonStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: buttonScale.value }],
-    };
-  });
-
-  const chevronRotation = useSharedValue(0);
-  const chevronStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ rotate: `${chevronRotation.value}deg` }],
-    };
-  });
-
-  useEffect(() => {
-    chevronRotation.value = withTiming(showCompleted ? -180 : 0, {
-      duration: 180,
-    });
-  }, [showCompleted, chevronRotation]);
 
   return (
     <AppScreen>
@@ -309,9 +304,9 @@ export default function Index() {
               <Animated.View entering={FadeInAnimation}>
                 <TaskList
                   items={remaining}
-                  onItemCheck={handleCheck}
-                  onItemPress={handlePress}
-                  onItemLongPress={handleLongPress}
+                  onItemCheck={handleItemCheck}
+                  onItemPress={handleItemPress}
+                  onItemLongPress={handleItemLongPress}
                   canBeSelected={mode === "select"}
                 />
               </Animated.View>
@@ -325,7 +320,7 @@ export default function Index() {
                 onPress={toggleShowCompleted}
                 className="flex flex-row items-center"
               >
-                <Animated.View style={[chevronStyle]} className="p-1">
+                <Animated.View style={[detailsStyle]} className="p-1">
                   <Ionicons
                     className="text-slate-400"
                     name="chevron-down"
@@ -341,9 +336,9 @@ export default function Index() {
                 <Animated.View entering={FadeInAnimation}>
                   <TaskList
                     items={completed}
-                    onItemCheck={handleCheck}
-                    onItemPress={handlePress}
-                    onItemLongPress={handleLongPress}
+                    onItemCheck={handleItemCheck}
+                    onItemPress={handleItemPress}
+                    onItemLongPress={handleItemLongPress}
                     canBeSelected={mode === "select"}
                   />
                 </Animated.View>
@@ -359,12 +354,16 @@ export default function Index() {
             className="absolute bottom-2 right-3"
           >
             <Pressable
-              onPress={showInput}
-              onPressIn={onPressIn}
-              onPressOut={onPressOut}
+              onPress={handleFabPress}
+              onPressIn={() => {
+                animateFabScale(0.9);
+              }}
+              onPressOut={() => {
+                animateFabScale(1);
+              }}
             >
               <Animated.View
-                style={[buttonStyle]}
+                style={[fabStyle]}
                 className={"p-2.5 bg-sky-400 rounded-full"}
               >
                 <Ionicons name="add" color={sky[50]} size={34} />
