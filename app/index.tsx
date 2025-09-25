@@ -6,6 +6,7 @@ import TextInputModal from "@/components/TextInputModal";
 import {
   addTodo,
   deleteTodos,
+  editTodoValue,
   getAllTodos,
   toggleTodoCompleted,
 } from "@/database/queries";
@@ -36,6 +37,11 @@ const FadeOutAnimation = FadeOut.duration(160).reduceMotion(
 export default function Index() {
   const db = useSQLiteContext();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
+
+  const [mode, setMode] = useState<Mode>("");
+  const [showCompleted, setShowCompleted] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -50,15 +56,11 @@ export default function Index() {
     })();
   }, []);
 
-  const [mode, setMode] = useState<Mode>("");
-  const [showCompleted, setShowCompleted] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
   const showInput = () => {
     setMode("input");
   };
 
-  const handleSubmit = async (value: string) => {
+  const addNewTask = async (value: string) => {
     const todo = await addTodo(db, value);
 
     setTasks((tasks) => [
@@ -69,14 +71,48 @@ export default function Index() {
       },
       ...tasks,
     ]);
+  };
+
+  const editCurrentTask = async (newValue: string) => {
+    const { id: currentId, value: currentValue } = currentTask!;
+
+    if (currentValue !== newValue) {
+      const { id, value } = await editTodoValue(db, currentId, newValue);
+      setTasks((tasks) =>
+        tasks.map((task) =>
+          task.id === id
+            ? {
+                ...task,
+                value,
+              }
+            : task
+        )
+      );
+    }
+  };
+
+  const handleSubmit = async (value: string) => {
+    if (value === "") {
+      setMode("");
+      return;
+    }
+
+    if (currentTask === undefined) {
+      addNewTask(value);
+    } else {
+      editCurrentTask(value);
+      setCurrentTask(undefined);
+    }
+
     setMode("");
   };
 
   const handleDismiss = () => {
+    setCurrentTask(undefined);
     setMode("");
   };
 
-  const toggleItemCompleted = async (id: string) => {
+  const toggleTaskCompleted = async (id: string) => {
     const index = tasks.findIndex((task) => task.id === id);
     if (index === -1) return;
 
@@ -98,8 +134,9 @@ export default function Index() {
     });
   };
 
-  const toggleItemSelected = (id: string) => {
+  const toggleTaskSelected = (id: string) => {
     setMode("select");
+
     setTasks((tasks) =>
       tasks.map((task) =>
         task.id === id
@@ -117,17 +154,21 @@ export default function Index() {
   };
 
   const handleCheck = (id: string) => {
-    toggleItemCompleted(id);
+    toggleTaskCompleted(id);
   };
 
   const handlePress = (id: string) => {
     if (mode === "select") {
-      toggleItemSelected(id);
+      toggleTaskSelected(id);
+    } else {
+      const task = tasks.find((task) => task.id === id);
+      setCurrentTask(task);
+      setMode("input");
     }
   };
 
   const handleLongPress = (id: string) => {
-    toggleItemSelected(id);
+    toggleTaskSelected(id);
   };
 
   const cancelSelection = () => {
@@ -364,6 +405,7 @@ export default function Index() {
           visible={mode === "input"}
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
+          initialValue={currentTask?.value}
         />
 
         <DangerModal

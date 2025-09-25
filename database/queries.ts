@@ -47,6 +47,22 @@ export async function addTodo(
   };
 }
 
+export async function editTodoValue(
+  db: SQLiteDatabase,
+  id: string,
+  newValue: string
+): Promise<{
+  id: string;
+  value: string;
+}> {
+  await db.runAsync("UPDATE todos SET value = ? WHERE id = ?", newValue, id);
+
+  return {
+    id,
+    value: newValue,
+  };
+}
+
 export async function toggleTodoCompleted(
   db: SQLiteDatabase,
   id: string,
