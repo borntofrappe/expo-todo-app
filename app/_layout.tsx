@@ -11,7 +11,6 @@ export default function TabsLayout() {
 
   const [sharedTheme, setSharedTheme] = useState<Theme>("light");
   const setTheme = (value: Theme) => {
-    console.log(value);
     setSharedTheme(value);
   };
 

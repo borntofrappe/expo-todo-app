@@ -3,18 +3,37 @@ import { ThemeContext } from "@/context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useContext, useState } from "react";
-import { Switch, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 export default function Settings() {
   const context = useContext(ThemeContext);
 
+  const iconTranslateY = useSharedValue(0);
+  const iconDistanceY = 200;
+  const iconStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateY: `${iconTranslateY.value * iconDistanceY * -1}%` },
+      ],
+    };
+  });
+
   const [darkTheme, setDarkTheme] = useState(false);
 
-  const updateTheme = () => {
+  const toggleTheme = () => {
     if (context === undefined) return;
 
     const shouldBeDarkTheme = !darkTheme;
 
+    iconTranslateY.value = withSpring(shouldBeDarkTheme ? 1 : 0, {
+      damping: 13,
+      stiffness: 120,
+    });
     setDarkTheme(shouldBeDarkTheme);
     context.setTheme(shouldBeDarkTheme ? "dark" : "light");
   };
@@ -22,26 +41,33 @@ export default function Settings() {
   return (
     <AppScreen>
       <View className="flex-1 px-3 py-3 gap-3">
-        <Link href={"/"}>
-          <Ionicons className="text-icon-1" name="arrow-back" size={24} />
-        </Link>
-        <Text className="text-3xl font-light text-color-2">Settings</Text>
-
-        <View className="gap-2 py-1">
-          <Text className="mb-1 text-sm text-color-3 uppercase font-semibold">
-            Style
-          </Text>
-          <View
-            className={`${context === undefined ? "opacity-75 cursor-not-allowed" : ""} flex flex-row gap-2 justify-between`}
+        <View className="flex flex-row justify-between items-center">
+          <Link href={"/"}>
+            <Ionicons className="text-icon-1" name="arrow-back" size={24} />
+          </Link>
+          <Pressable
+            onPress={toggleTheme}
+            disabled={context === undefined}
+            className={`${context === undefined ? "invisible" : ""}`}
           >
-            <Text className="text-base text-color-2">Dark theme</Text>
-            <Switch
-              disabled={context === undefined}
-              value={darkTheme}
-              onValueChange={updateTheme}
-            />
-          </View>
+            <View className="relative overflow-hidden">
+              <Animated.View style={[iconStyle]}>
+                <View className="relative">
+                  <Ionicons className="text-icon-1" name="sunny" size={22} />
+                </View>
+                <View
+                  className={`absolute w-full h-full items-center justify-center translate-y-[${iconDistanceY}%]`}
+                >
+                  <Ionicons className="text-icon-1" name="moon" size={18} />
+                </View>
+              </Animated.View>
+            </View>
+          </Pressable>
         </View>
+        <Text className="text-3xl font-light text-color-2">Settings?</Text>
+        <Text className="text-color-3">
+          Likely turned to something more useful than just setting dark theme
+        </Text>
       </View>
     </AppScreen>
   );
