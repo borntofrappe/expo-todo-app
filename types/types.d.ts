@@ -10,3 +10,9 @@ type Task = Pick<Todo, "id" | "value"> & {
 };
 
 type Mode = "" | "input" | "select";
+
+type Theme = "light" | "dark";
+
+type AppPreferences = {
+  theme: Theme;
+};

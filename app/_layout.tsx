@@ -1,8 +1,9 @@
-import { Theme, ThemeContext } from "@/context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
 import { initDB } from "@/database/queries";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Tabs } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import "../styles/global.css";
 
@@ -13,6 +14,19 @@ export default function TabsLayout() {
   const setTheme = (value: Theme) => {
     setSharedTheme(value);
   };
+
+  useEffect(() => {
+    (async () => {
+      const json = await AsyncStorage.getItem("app-preferences");
+
+      const appPreferences =
+        json === null ? null : (JSON.parse(json) as AppPreferences);
+
+      if (appPreferences) {
+        setTheme(appPreferences.theme);
+      }
+    })();
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme: sharedTheme, setTheme }}>

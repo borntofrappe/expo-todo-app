@@ -1,8 +1,9 @@
 import AppScreen from "@/components/AppScreen";
 import { ThemeContext } from "@/context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link } from "expo-router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -25,17 +26,41 @@ export default function Settings() {
 
   const [darkTheme, setDarkTheme] = useState(false);
 
-  const toggleTheme = () => {
+  useEffect(() => {
+    (async () => {
+      const json = await AsyncStorage.getItem("app-preferences");
+
+      const appPreferences =
+        json === null ? null : (JSON.parse(json) as AppPreferences);
+
+      if (appPreferences) {
+        if (appPreferences.theme === "dark") {
+          setDarkTheme(true);
+          iconTranslateY.value = 1;
+        }
+      }
+    })();
+  }, []);
+
+  const toggleTheme = async () => {
     if (context === undefined) return;
 
     const shouldBeDarkTheme = !darkTheme;
+    const theme = shouldBeDarkTheme ? "dark" : "light";
 
-    iconTranslateY.value = withSpring(shouldBeDarkTheme ? 1 : 0, {
-      damping: 13,
-      stiffness: 120,
-    });
-    setDarkTheme(shouldBeDarkTheme);
-    context.setTheme(shouldBeDarkTheme ? "dark" : "light");
+    try {
+      const jsonValue = JSON.stringify({
+        theme,
+      });
+      await AsyncStorage.setItem("app-preferences", jsonValue);
+
+      iconTranslateY.value = withSpring(shouldBeDarkTheme ? 1 : 0, {
+        damping: 13,
+        stiffness: 120,
+      });
+      setDarkTheme(shouldBeDarkTheme);
+      context.setTheme(theme);
+    } catch (e) {}
   };
 
   return (
@@ -58,7 +83,7 @@ export default function Settings() {
                 <View
                   className={`absolute w-full h-full items-center justify-center translate-y-[${iconDistanceY}%]`}
                 >
-                  <Ionicons className="text-icon-1" name="moon" size={18} />
+                  <Ionicons className="text-icon-1" name="moon" size={16} />
                 </View>
               </Animated.View>
             </View>
