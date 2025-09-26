@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 import { Dimensions } from "react-native";
 import "../styles/global.css";
+
 export default function TabsLayout() {
   const transitionDuration = 280;
 
@@ -12,7 +13,7 @@ export default function TabsLayout() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            display: "none", // uncomment when handling navigation between the two tabs
+            display: "none",
           },
           transitionSpec: {
             animation: "timing",
