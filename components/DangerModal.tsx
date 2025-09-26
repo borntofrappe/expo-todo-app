@@ -1,3 +1,5 @@
+import { ThemeContext } from "@/context/ThemeContext";
+import { useContext } from "react";
 import { Modal, Text, TouchableHighlight, View } from "react-native";
 import { slate } from "tailwindcss/colors";
 
@@ -20,6 +22,8 @@ export default function DangerModal({
   prompt,
   action,
 }: Props) {
+  const context = useContext(ThemeContext);
+
   return (
     <Modal
       visible={visible}
@@ -28,7 +32,9 @@ export default function DangerModal({
       onRequestClose={onDismiss}
       onPointerDown={onDismiss}
     >
-      <View className="flex-1 justify-end items-center">
+      <View
+        className={`${context && context.theme} flex-1 justify-end items-center`}
+      >
         <View
           onPointerDown={(e) => {
             e.stopPropagation();

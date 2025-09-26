@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Modal, Pressable, Text, TextInput, View } from "react-native";
 
 type Props = {
@@ -16,6 +17,7 @@ export default function TextInputModal({
 }: Props) {
   const [value, setValue] = useState("");
   const textInputRef = useRef<TextInput>(null!);
+  const context = useContext(ThemeContext);
 
   useEffect(() => {
     setValue(initialValue || "");
@@ -41,7 +43,7 @@ export default function TextInputModal({
         }, 50);
       }}
     >
-      <View className="flex-1 justify-end">
+      <View className={`${context && context.theme} flex-1 justify-end`}>
         <View
           onPointerDown={(e) => {
             e.stopPropagation();
