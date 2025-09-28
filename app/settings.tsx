@@ -81,7 +81,7 @@ export default function Settings() {
                   <Ionicons className="text-icon-1" name="sunny" size={22} />
                 </View>
                 <View
-                  className={`absolute w-full h-full items-center justify-center translate-y-[${iconDistanceY}%]`}
+                  className={`absolute w-full h-full items-center justify-center top-[${`${iconDistanceY}%`}]`}
                 >
                   <Ionicons className="text-icon-1" name="moon" size={16} />
                 </View>
