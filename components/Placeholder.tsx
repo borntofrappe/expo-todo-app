@@ -14,7 +14,7 @@ export default function Placeholder() {
 
   return (
     <View className="flex gap-4 items-center">
-      <View className="relative size-28 justify-center items-center gap-2">
+      <View className="relative justify-center items-center size-[92px] gap-[3px]">
         <View
           style={{ backgroundColor }}
           className="absolute left-4 top-3 opacity-10 size-full rounded-3xl"
@@ -33,11 +33,11 @@ export default function Placeholder() {
 
 function PlaceholderRow({ color }: { color: string }) {
   return (
-    <View className="flex flex-row gap-1 items-center">
-      <Ionicons name="checkmark-circle-outline" color={color} size={26} />
+    <View className="flex flex-row gap-[3px] items-center">
+      <Ionicons name="checkmark-circle-outline" color={color} size={28} />
       <View
         style={{ backgroundColor: color }}
-        className="w-5 h-0.5 rounded-sm"
+        className="w-[20px] h-[3px] rounded-sm"
       />
     </View>
   );
