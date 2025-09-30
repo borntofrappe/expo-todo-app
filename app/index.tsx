@@ -1,5 +1,6 @@
 import AppScreen from "@/components/AppScreen";
 import DangerModal from "@/components/DangerModal";
+import FloatingActionButton from "@/components/FloatingActionButton";
 import Placeholder from "@/components/Placeholder";
 import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
@@ -358,24 +359,8 @@ export default function Index() {
           <Animated.View
             entering={FadeInAnimation.delay(75)}
             exiting={FadeOutAnimation}
-            className="absolute bottom-2 right-3"
           >
-            <Pressable
-              onPress={handleFabPress}
-              onPressIn={() => {
-                animateFabScale(0.9);
-              }}
-              onPressOut={() => {
-                animateFabScale(1);
-              }}
-            >
-              <Animated.View
-                style={[fabStyle]}
-                className={"p-2.5 bg-background-fab rounded-full"}
-              >
-                <Ionicons className="text-color-fab" name="add" size={34} />
-              </Animated.View>
-            </Pressable>
+            <FloatingActionButton onPress={handleFabPress} icon="add" />
           </Animated.View>
         )}
 
