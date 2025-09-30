@@ -17,7 +17,7 @@ export default function Settings() {
   const themeColor: "light" | "dark" =
     context && context.theme === "dark" ? "dark" : "light";
 
-  const iconColor1 = colors[themeColor]["icon-color-1"];
+  const iconBase = colors[themeColor]["icon-base"];
 
   const iconTranslateY = useSharedValue(0);
   const iconDistanceY = 200;
@@ -73,7 +73,7 @@ export default function Settings() {
       <View className="flex-1 px-3 py-3 gap-3">
         <View className="flex flex-row justify-between items-center">
           <Link href={"/"}>
-            <Ionicons name="arrow-back" color={iconColor1} size={24} />
+            <Ionicons name="arrow-back" color={iconBase} size={24} />
           </Link>
           <Pressable
             onPress={toggleTheme}
@@ -83,19 +83,19 @@ export default function Settings() {
             <View className="relative overflow-hidden">
               <Animated.View style={[iconStyle]}>
                 <View className="relative">
-                  <Ionicons name="sunny" color={iconColor1} size={22} />
+                  <Ionicons name="sunny" color={iconBase} size={22} />
                 </View>
                 <View
                   className={`absolute w-full h-full items-center justify-center top-[${`${iconDistanceY}%`}]`}
                 >
-                  <Ionicons name="moon" color={iconColor1} size={16} />
+                  <Ionicons name="moon" color={iconBase} size={16} />
                 </View>
               </Animated.View>
             </View>
           </Pressable>
         </View>
-        <Text className="text-3xl font-light text-color-2">Settings?</Text>
-        <Text className="text-color-3">
+        <Text className="text-3xl font-light text-text-2">Settings?</Text>
+        <Text className="text-text-2">
           Likely turned to something more useful than just setting dark theme
         </Text>
       </View>

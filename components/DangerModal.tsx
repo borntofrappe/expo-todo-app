@@ -1,7 +1,6 @@
 import { ThemeContext } from "@/context/ThemeContext";
 import { useContext } from "react";
 import { Modal, Text, TouchableHighlight, View } from "react-native";
-import { slate } from "tailwindcss/colors";
 
 type Props = {
   visible: boolean;
@@ -39,24 +38,24 @@ export default function DangerModal({
           onPointerDown={(e) => {
             e.stopPropagation();
           }}
-          className="mx-3 mb-4 px-6 py-6 items-center gap-2 bg-background--1 shadow-md elevation-md rounded-lg"
+          className="mx-3 mb-4 px-6 py-6 items-center gap-2 bg-layer-2 shadow-md elevation-md rounded-lg"
         >
-          <Text className="font-bold text-color-1">{title}</Text>
-          <Text className="text-color-1">{prompt}</Text>
+          <Text className="font-bold text-text-2">{title}</Text>
+          <Text className="text-text-2">{prompt}</Text>
           <View className="mt-3 flex flex-row gap-3 justify-center items-center">
             <TouchableHighlight
-              underlayColor={slate[200]}
-              className="bg-background-2 px-8 py-3 rounded-xl"
+              //???
+              className="bg-layer-3 px-8 py-3 rounded-xl"
               onPress={onCancel}
             >
-              <Text className="font-bold text-color-2">Cancel</Text>
+              <Text className="font-bold text-text-2">Cancel</Text>
             </TouchableHighlight>
             <TouchableHighlight
-              underlayColor={slate[200]}
-              className="bg-background-2 px-8 py-3 rounded-xl"
+              //???
+              className="bg-layer-3 px-8 py-3 rounded-xl"
               onPress={onAction}
             >
-              <Text className="font-bold text-color-danger">{action}</Text>
+              <Text className="font-bold text-danger">{action}</Text>
             </TouchableHighlight>
           </View>
         </View>

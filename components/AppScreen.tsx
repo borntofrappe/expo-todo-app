@@ -6,9 +6,7 @@ export default function AppScreen({ children }: PropsWithChildren) {
   const context = useContext(ThemeContext);
 
   return (
-    <SafeAreaView
-      className={`${context && context.theme} flex-1 bg-background-1`}
-    >
+    <SafeAreaView className={`${context && context.theme} flex-1 bg-layer-1`}>
       {children}
     </SafeAreaView>
   );

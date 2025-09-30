@@ -1,3 +1,4 @@
+import colors from "@/constants/colors";
 import { ThemeContext } from "@/context/ThemeContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Modal, Pressable, Text, TextInput, View } from "react-native";
@@ -18,6 +19,8 @@ export default function TextInputModal({
   const [value, setValue] = useState("");
   const textInputRef = useRef<TextInput>(null!);
   const context = useContext(ThemeContext);
+  const themeColor: "light" | "dark" =
+    context && context.theme === "dark" ? "dark" : "light";
 
   useEffect(() => {
     setValue(initialValue || "");
@@ -48,15 +51,16 @@ export default function TextInputModal({
           onPointerDown={(e) => {
             e.stopPropagation();
           }}
-          className="mx-2 mb-3 px-4 py-4 gap-4 bg-background--1 shadow-md elevation-md rounded-lg"
+          className="mx-2 mb-3 px-4 py-4 gap-4 bg-layer-2 shadow-md elevation-md rounded-lg"
         >
           <TextInput
             onSubmitEditing={submit}
             onChangeText={setValue}
             value={value}
             ref={textInputRef}
-            className="px-1 py-1 outline-none text-base text-color-1"
+            className="px-1 py-1 outline-none text-base text-text-1"
             placeholder="New task..."
+            placeholderTextColor={colors[themeColor]["placeholder-text"]}
           />
 
           <Pressable
@@ -65,7 +69,7 @@ export default function TextInputModal({
             className="ml-auto"
           >
             <Text
-              className={`font-bold ${value === "" ? "text-color-empty" : "text-color-theme"}`}
+              className={`font-bold ${value === "" ? "text-text-5" : "text-theme"}`}
             >
               Done
             </Text>

@@ -44,8 +44,10 @@ export default function TaskList({
           onItemLongPress={onItemLongPress}
           canBeSelected={canBeSelected || false}
           colors={[
-            colors[themeColor]["icon-color-1"],
-            colors[themeColor]["theme-color"],
+            colors[themeColor]["icon-checked"],
+            colors[themeColor]["icon-unchecked"],
+            colors[themeColor]["icon-selected"],
+            colors[themeColor]["icon-unselected"],
           ]}
         />
       )}
@@ -59,7 +61,7 @@ type ItemProps = {
   onItemPress: (id: string) => void;
   onItemLongPress: (id: string) => void;
   canBeSelected: boolean;
-  colors: [string, string];
+  colors: [string, string, string, string];
 };
 function TaskItem({
   item,
@@ -83,13 +85,16 @@ function TaskItem({
       transform: [{ scale: itemScale.value }],
     };
   });
-  const textStyle = item.completed ? "text-color-empty" : "text-color-2";
+  const textStyle = item.completed ? "text-text-5" : "text-text-1";
   const iconStart: IoniconsName = item.completed
     ? "checkbox"
     : "square-outline";
   const iconEnd: IoniconsName = item.selected
     ? "checkmark-circle"
     : "checkmark-circle-outline";
+
+  const iconStartColor = item.completed ? colors[0] : colors[1];
+  const iconEndColor = item.selected ? colors[2] : colors[3];
 
   return (
     <Pressable
@@ -105,7 +110,7 @@ function TaskItem({
     >
       <Animated.View style={[itemStyle]}>
         <View
-          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-background-3 shadow-sm elevation-sm" : "bg-background--1 shadow-md elevation-md"}`}
+          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-layer-3" : "bg-layer-2 shadow-sm elevation-sm"}`}
         >
           <Pressable
             onPress={(e) => {
@@ -113,17 +118,13 @@ function TaskItem({
             }}
             className={`p-1 ${canBeSelected && "invisible"}`}
           >
-            <Ionicons name={iconStart} color={colors[0]} size={18} />
+            <Ionicons name={iconStart} color={iconStartColor} size={18} />
           </Pressable>
           <Text className={`text-base font-bold ${textStyle}`}>
             {item.value}
           </Text>
           <View className={`ml-auto p-1 ${!canBeSelected && "invisible"}`}>
-            <Ionicons
-              name={iconEnd}
-              color={item.selected ? colors[1] : colors[0]}
-              size={24}
-            />
+            <Ionicons name={iconEnd} color={iconEndColor} size={24} />
           </View>
         </View>
       </Animated.View>

@@ -9,8 +9,8 @@ export default function Placeholder() {
   const context = useContext(ThemeContext);
   const themeColor: "light" | "dark" =
     context && context.theme === "dark" ? "dark" : "light";
-  const color = colors[themeColor]["placeholder-fg"];
-  const backgroundColor = colors[themeColor]["placeholder-bg"];
+  const color = colors[themeColor]["illustration-fg"];
+  const backgroundColor = colors[themeColor]["illustration-bg"];
 
   return (
     <View className="flex gap-4 items-center">
@@ -26,7 +26,7 @@ export default function Placeholder() {
         <PlaceholderRow color={color} />
         <PlaceholderRow color={color} />
       </View>
-      <Text className="text-sm text-color-3">No tasks yet.</Text>
+      <Text className="text-sm text-text-2">No tasks yet.</Text>
     </View>
   );
 }

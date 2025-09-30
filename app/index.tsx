@@ -37,9 +37,11 @@ export default function Index() {
   const context = useContext(ThemeContext);
   const themeColor: "light" | "dark" =
     context && context.theme === "dark" ? "dark" : "light";
-  const [iconColor1, iconColor2] = [
-    colors[themeColor]["icon-color-1"],
-    colors[themeColor]["icon-color-2"],
+  const [iconBase, iconSub1, iconSub2, iconActive] = [
+    colors[themeColor]["icon-base"],
+    colors[themeColor]["icon-sub-1"],
+    colors[themeColor]["icon-sub-2"],
+    colors[themeColor]["icon-active"],
   ];
 
   const db = useSQLiteContext();
@@ -255,13 +257,21 @@ export default function Index() {
             <>
               <View className="flex flex-row justify-between">
                 <Pressable onPress={cancelSelection}>
-                  <Ionicons name="close" color={iconColor1} size={24} />
+                  <Ionicons name="close" color={iconBase} size={24} />
                 </Pressable>
                 <Pressable onPress={toggleSelection}>
-                  <Ionicons name="list-outline" color={iconColor1} size={24} />
+                  <Ionicons
+                    name="list-outline"
+                    color={
+                      tasks.every((task) => task.selected)
+                        ? iconActive
+                        : iconSub1
+                    }
+                    size={24}
+                  />
                 </Pressable>
               </View>
-              <Text className="text-3xl font-light text-color-1">
+              <Text className="text-3xl font-light text-text-2">
                 {selectedCount === 0
                   ? "Select items"
                   : `${selectedCount} items selected`}
@@ -273,12 +283,12 @@ export default function Index() {
                 <Link href={"/settings"}>
                   <Ionicons
                     name="settings-outline"
-                    color={iconColor1}
+                    color={iconBase}
                     size={24}
                   />
                 </Link>
               </View>
-              <Text className="text-3xl font-light text-color-1">Tasks</Text>
+              <Text className="text-3xl font-light text-text-2">Tasks</Text>
             </>
           )}
 
@@ -314,10 +324,10 @@ export default function Index() {
                 className="flex flex-row items-center"
               >
                 <Animated.View style={[detailsStyle]} className="p-1">
-                  <Ionicons name="chevron-down" color={iconColor2} size={18} />
+                  <Ionicons name="chevron-down" color={iconSub2} size={18} />
                 </Animated.View>
                 <Text
-                  style={{ color: iconColor2 }}
+                  style={{ color: iconSub2 }}
                   className="text-sm font-semibold"
                 >
                   Completed {completed.length}
@@ -362,10 +372,10 @@ export default function Index() {
                 >
                   <Ionicons
                     name="trash-bin-outline"
-                    color={iconColor2}
+                    color={iconSub1}
                     size={24}
                   />
-                  <Text style={{ color: iconColor2 }} className="text-xs">
+                  <Text style={{ color: iconSub1 }} className="text-xs">
                     Delete
                   </Text>
                 </View>
@@ -378,7 +388,7 @@ export default function Index() {
           <Animated.View
             entering={FadeInAnimation}
             exiting={FadeOutAnimation}
-            className="absolute w-full h-full bg-background-modal"
+            className="absolute w-full h-full bg-text-2/15"
           />
         )}
 

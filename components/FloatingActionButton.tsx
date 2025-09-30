@@ -21,8 +21,8 @@ export default function FloatingActionButton(props: Props) {
   const context = useContext(ThemeContext);
   const themeColor: "light" | "dark" =
     context && context.theme === "dark" ? "dark" : "light";
-  const color = colors[themeColor]["fab-color"];
-  const backgroundColor = colors[themeColor]["fab-background"];
+  const color = colors[themeColor]["fab-fg"];
+  const backgroundColor = colors[themeColor]["fab-bg"];
 
   const { onPress, icon, size = 36 } = props;
 

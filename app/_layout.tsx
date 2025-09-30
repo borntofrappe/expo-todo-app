@@ -21,8 +21,8 @@ export default function TabsLayout() {
     setSharedTheme(value);
   };
 
-  const colors = ["hsl(215, 19%, 35%)", "hsl(215, 20%, 65%)"];
-  const backgroundColors = ["hsl(210, 40%, 98%)", "hsl(222, 47%, 11%)"];
+  const colors = ["oklch(0.3132 0 0)", "oklch(0.8452 0 0)"];
+  const backgroundColors = ["oklch(0.9761 0 0)", "oklch(0.1286 0 0)"];
 
   const color = useSharedValue(colors[0]);
   const backgroundColor = useSharedValue(backgroundColors[0]);
@@ -135,12 +135,7 @@ export default function TabsLayout() {
             style={[opacityStyle, backgroundStyle, translateXStyle]}
             className="absolute top-0 left-0 w-full h-full justify-center items-center"
           >
-            <Animated.Text
-              style={[colorStyle]}
-              className="relative overflow-hidde text-sm text-color-3"
-            >
-              And so it begins
-            </Animated.Text>
+            <Animated.Text style={[colorStyle]}>And so it begins</Animated.Text>
           </Animated.View>
         </View>
       </SQLiteProvider>
