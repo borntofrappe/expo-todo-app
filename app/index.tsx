@@ -3,6 +3,8 @@ import DangerModal from "@/components/DangerModal";
 import Placeholder from "@/components/Placeholder";
 import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
+import colors from "@/constants/colors";
+import { ThemeContext } from "@/context/ThemeContext";
 import {
   addTodo,
   deleteTodos,
@@ -13,7 +15,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
   FadeIn,
@@ -33,6 +35,14 @@ const FadeOutAnimation = FadeOut.duration(160).reduceMotion(
 );
 
 export default function Index() {
+  const context = useContext(ThemeContext);
+  const themeColor: "light" | "dark" =
+    context && context.theme === "dark" ? "dark" : "light";
+  const [iconColor1, iconColor2] = [
+    colors[themeColor]["icon-color-1"],
+    colors[themeColor]["icon-color-2"],
+  ];
+
   const db = useSQLiteContext();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
@@ -260,14 +270,10 @@ export default function Index() {
             <>
               <View className="flex flex-row justify-between">
                 <Pressable onPress={cancelSelection}>
-                  <Ionicons className="text-icon-1" name="close" size={24} />
+                  <Ionicons name="close" color={iconColor1} size={24} />
                 </Pressable>
                 <Pressable onPress={toggleSelection}>
-                  <Ionicons
-                    className="text-icon-1"
-                    name="list-outline"
-                    size={24}
-                  />
+                  <Ionicons name="list-outline" color={iconColor1} size={24} />
                 </Pressable>
               </View>
               <Text className="text-3xl font-light text-color-1">
@@ -281,8 +287,8 @@ export default function Index() {
               <View className="items-end">
                 <Link href={"/settings"}>
                   <Ionicons
-                    className="text-icon-1"
                     name="settings-outline"
+                    color={iconColor1}
                     size={24}
                   />
                 </Link>
@@ -323,13 +329,12 @@ export default function Index() {
                 className="flex flex-row items-center"
               >
                 <Animated.View style={[detailsStyle]} className="p-1">
-                  <Ionicons
-                    className="text-icon-2"
-                    name="chevron-down"
-                    size={18}
-                  />
+                  <Ionicons name="chevron-down" color={iconColor2} size={18} />
                 </Animated.View>
-                <Text className="text-icon-2 text-sm font-semibold">
+                <Text
+                  style={{ color: iconColor2 }}
+                  className="text-sm font-semibold"
+                >
                   Completed {completed.length}
                 </Text>
               </Pressable>
@@ -387,11 +392,13 @@ export default function Index() {
                   className={`margin-auto flex gap-1.5 items-center ${selectedCount === 0 ? "opacity-50" : ""}`}
                 >
                   <Ionicons
-                    className="text-xs text-color-2"
                     name="trash-bin-outline"
+                    color={iconColor2}
                     size={24}
                   />
-                  <Text className="text-xs text-color-2">Delete</Text>
+                  <Text style={{ color: iconColor2 }} className="text-xs">
+                    Delete
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>

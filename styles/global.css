@@ -10,17 +10,9 @@
   --background-1: 210, 40%, 98%;
   --background-2: 210, 40%, 96%;
   --background-3: 214, 32%, 91%;
-  --icon-1: 215, 16%, 47%;
-  --icon-2: 215, 20%, 65%;
-  --shadow-1: 214, 32%, 91%;
-  --shadow-2: 213, 27%, 84%;
-
   --color-danger: 0, 74%, 42%;
   --color-theme: 198, 93%, 60%;
-  --color-placeholder: 199, 89%, 48%;
   --color-empty: 215, 20%, 65%;
-  --color-fab: 204, 100%, 97%;
-  --background-fab: 198, 93%, 60%;
   --background-modal: 215, 25%, 27%, 0.12;
 }
 
@@ -32,16 +24,8 @@
   --background-1: 222, 47%, 11%;
   --background-2: 217, 33%, 17%;
   --background-3: 215, 25%, 27%;
-  --icon-1: 213, 24%, 73%;
-  --icon-2: 215, 20%, 65%;
-  --shadow-1: 217, 33%, 17%;
-  --shadow-2: 215, 25%, 27%;
-
   --color-danger: 0, 72%, 51%;
   --color-theme: 199, 89%, 48%;
-  --color-placeholder: 198, 93%, 60%;
   --color-empty: 215, 16%, 47%;
-  --color-fab: 204, 100%, 97%;
-  --background-fab: 199, 89%, 48%;
   --background-modal: 229, 84%, 5%, 0.4;
 }

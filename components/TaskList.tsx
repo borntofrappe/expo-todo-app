@@ -1,4 +1,7 @@
+import colors from "@/constants/colors";
+import { ThemeContext } from "@/context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -23,6 +26,10 @@ export default function TaskList({
   onItemLongPress,
   canBeSelected,
 }: Props) {
+  const context = useContext(ThemeContext);
+  const themeColor: "light" | "dark" =
+    context && context.theme === "dark" ? "dark" : "light";
+
   return (
     <FlatList
       className="overflow-visible"
@@ -36,6 +43,10 @@ export default function TaskList({
           onItemPress={onItemPress}
           onItemLongPress={onItemLongPress}
           canBeSelected={canBeSelected || false}
+          colors={[
+            colors[themeColor]["icon-color-1"],
+            colors[themeColor]["theme-color"],
+          ]}
         />
       )}
     />
@@ -48,6 +59,7 @@ type ItemProps = {
   onItemPress: (id: string) => void;
   onItemLongPress: (id: string) => void;
   canBeSelected: boolean;
+  colors: [string, string];
 };
 function TaskItem({
   item,
@@ -55,6 +67,7 @@ function TaskItem({
   onItemPress,
   onItemLongPress,
   canBeSelected,
+  colors,
 }: ItemProps) {
   const itemScale = useSharedValue(1);
   const onPressIn = () => {
@@ -77,7 +90,6 @@ function TaskItem({
   const iconEnd: IoniconsName = item.selected
     ? "checkmark-circle"
     : "checkmark-circle-outline";
-  const iconEndStyle = item.selected ? "text-color-theme" : "text-icon-1";
 
   return (
     <Pressable
@@ -101,13 +113,17 @@ function TaskItem({
             }}
             className={`p-1 ${canBeSelected && "invisible"}`}
           >
-            <Ionicons className="text-icon-1" name={iconStart} size={18} />
+            <Ionicons name={iconStart} color={colors[0]} size={18} />
           </Pressable>
           <Text className={`text-base font-bold ${textStyle}`}>
             {item.value}
           </Text>
           <View className={`ml-auto p-1 ${!canBeSelected && "invisible"}`}>
-            <Ionicons className={iconEndStyle} name={iconEnd} size={24} />
+            <Ionicons
+              name={iconEnd}
+              color={item.selected ? colors[1] : colors[0]}
+              size={24}
+            />
           </View>
         </View>
       </Animated.View>

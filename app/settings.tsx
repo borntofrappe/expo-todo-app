@@ -1,4 +1,5 @@
 import AppScreen from "@/components/AppScreen";
+import colors from "@/constants/colors";
 import { ThemeContext } from "@/context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,6 +14,10 @@ import Animated, {
 
 export default function Settings() {
   const context = useContext(ThemeContext);
+  const themeColor: "light" | "dark" =
+    context && context.theme === "dark" ? "dark" : "light";
+
+  const iconColor1 = colors[themeColor]["icon-color-1"];
 
   const iconTranslateY = useSharedValue(0);
   const iconDistanceY = 200;
@@ -68,7 +73,7 @@ export default function Settings() {
       <View className="flex-1 px-3 py-3 gap-3">
         <View className="flex flex-row justify-between items-center">
           <Link href={"/"}>
-            <Ionicons className="text-icon-1" name="arrow-back" size={24} />
+            <Ionicons name="arrow-back" color={iconColor1} size={24} />
           </Link>
           <Pressable
             onPress={toggleTheme}
@@ -78,12 +83,12 @@ export default function Settings() {
             <View className="relative overflow-hidden">
               <Animated.View style={[iconStyle]}>
                 <View className="relative">
-                  <Ionicons className="text-icon-1" name="sunny" size={22} />
+                  <Ionicons name="sunny" color={iconColor1} size={22} />
                 </View>
                 <View
                   className={`absolute w-full h-full items-center justify-center top-[${`${iconDistanceY}%`}]`}
                 >
-                  <Ionicons className="text-icon-1" name="moon" size={16} />
+                  <Ionicons name="moon" color={iconColor1} size={16} />
                 </View>
               </Animated.View>
             </View>

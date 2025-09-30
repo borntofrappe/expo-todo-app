@@ -1,14 +1,8 @@
 # expo-todo-app
 
-A basic todo application with two screens.
+android todo app.
 
-- light dark mode
-
-- font-size magnifier
-
-- async storage for app preferences
-
-<!--
-npx expo start --web
+```sh
+npx expo start --tunnel
 npx expo start --clear --tunnel
- -->
+```
