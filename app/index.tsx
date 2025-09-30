@@ -214,8 +214,10 @@ export default function Index() {
       toggleTaskSelected(id);
     } else {
       const task = tasks.find((task) => task.id === id);
-      setCurrentTask(task);
-      setMode("input");
+      if (task && task.completed === false) {
+        setCurrentTask(task);
+        setMode("input");
+      }
     }
   };
 
