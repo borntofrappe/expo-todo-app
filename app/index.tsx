@@ -1,7 +1,7 @@
 import AppScreen from "@/components/AppScreen";
 import DangerModal from "@/components/DangerModal";
+import EmptyIllustration from "@/components/EmptyIllustration";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import Placeholder from "@/components/Placeholder";
 import TaskList from "@/components/TaskList";
 import TextInputModal from "@/components/TextInputModal";
 import colors from "@/constants/colors";
@@ -298,7 +298,7 @@ export default function Index() {
               exiting={FadeOutAnimation}
               className="flex-[0.67] justify-center items-center"
             >
-              <Placeholder />
+              <EmptyIllustration />
             </Animated.View>
           )}
 

@@ -5,7 +5,7 @@ import colors from "@/constants/colors";
 import { ThemeContext } from "@/context/ThemeContext";
 import { useContext } from "react";
 
-export default function Placeholder() {
+export default function EmptyIllustration() {
   const context = useContext(ThemeContext);
   const themeColor: "light" | "dark" =
     context && context.theme === "dark" ? "dark" : "light";
@@ -23,18 +23,18 @@ export default function Placeholder() {
           style={{ backgroundColor }}
           className="absolute left-0 top-0 opacity-35 size-full rounded-3xl backdrop-blur-sm"
         />
-        <PlaceholderRow color={color} />
-        <PlaceholderRow color={color} />
+        <Row color={color} />
+        <Row color={color} />
       </View>
       <Text className="text-sm text-text-2">No tasks yet.</Text>
     </View>
   );
 }
 
-function PlaceholderRow({ color }: { color: string }) {
+function Row({ color }: { color: string }) {
   return (
     <View className="flex flex-row gap-[3px] items-center">
-      <Ionicons name="checkmark-circle-outline" color={color} size={28} />
+      <Ionicons name="checkmark-circle-outline" color={color} size={26} />
       <View
         style={{ backgroundColor: color }}
         className="w-[20px] h-[3px] rounded-sm"
