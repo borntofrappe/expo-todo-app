@@ -105,7 +105,7 @@ function TaskItem({
     >
       <Animated.View style={[itemStyle]}>
         <View
-          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-background-3 drop-shadow-sm elevation-sm" : "bg-background--1 drop-shadow-md elevation-md"} shadow-shadow-1`}
+          className={`px-3 py-4 rounded-md flex flex-row gap-1 items-center ${item.selected ? "bg-background-3 shadow-sm elevation-sm" : "bg-background--1 shadow-md elevation-md"}`}
         >
           <Pressable
             onPress={(e) => {

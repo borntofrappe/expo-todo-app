@@ -54,7 +54,7 @@ export default function FloatingActionButton(props: Props) {
       >
         <Animated.View style={[style]}>
           <Ionicons
-            className="p-2.5 rounded-full"
+            className="p-2.5 rounded-full shadow-md elevation-md"
             color={color}
             style={{
               backgroundColor,

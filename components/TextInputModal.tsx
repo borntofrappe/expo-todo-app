@@ -48,7 +48,7 @@ export default function TextInputModal({
           onPointerDown={(e) => {
             e.stopPropagation();
           }}
-          className="mx-2 mb-3 px-4 py-4 gap-4 bg-background--1 shadow-lg elevation-sm-lg shadow-shadow-1 rounded-lg"
+          className="mx-2 mb-3 px-4 py-4 gap-4 bg-background--1 shadow-md elevation-md rounded-lg"
         >
           <TextInput
             onSubmitEditing={submit}

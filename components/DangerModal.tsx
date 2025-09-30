@@ -39,7 +39,7 @@ export default function DangerModal({
           onPointerDown={(e) => {
             e.stopPropagation();
           }}
-          className="mx-3 mb-4 px-6 py-6 items-center gap-2 bg-background--1 shadow-lg elevation-sm-lg shadow-shadow-1 rounded-lg"
+          className="mx-3 mb-4 px-6 py-6 items-center gap-2 bg-background--1 shadow-md elevation-md rounded-lg"
         >
           <Text className="font-bold text-color-1">{title}</Text>
           <Text className="text-color-1">{prompt}</Text>

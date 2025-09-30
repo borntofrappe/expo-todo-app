@@ -24,8 +24,6 @@ import Animated, {
   ReduceMotion,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
-  WithSpringConfig,
   withTiming,
 } from "react-native-reanimated";
 
@@ -64,22 +62,6 @@ export default function Index() {
       );
     })();
   }, []);
-
-  const fabScale = useSharedValue(1);
-  const fabStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: fabScale.value }],
-    };
-  });
-
-  const fabSpringConfig: WithSpringConfig = {
-    damping: 0.1,
-    stiffness: 200,
-  };
-
-  const animateFabScale = (toValue: number) => {
-    fabScale.value = withSpring(toValue, fabSpringConfig);
-  };
 
   const details = useSharedValue(0);
   const detailsStyle = useAnimatedStyle(() => {
