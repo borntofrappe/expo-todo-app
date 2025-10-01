@@ -384,11 +384,11 @@ export default function Index() {
           </Animated.View>
         )}
 
-        {mode === "input" && (
+        {(mode === "input" || showDeleteModal) && (
           <Animated.View
             entering={FadeInAnimation}
             exiting={FadeOutAnimation}
-            className="absolute w-full h-full bg-text-2/15"
+            className="absolute w-full h-full bg-text-2/20"
           />
         )}
 

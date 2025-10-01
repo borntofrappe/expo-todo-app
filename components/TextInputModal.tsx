@@ -1,7 +1,8 @@
 import colors from "@/constants/colors";
 import { ThemeContext } from "@/context/ThemeContext";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Modal, Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
+import BottomModal from "./BottomModal";
 
 type Props = {
   visible: boolean;
@@ -32,50 +33,35 @@ export default function TextInputModal({
   };
 
   return (
-    <Modal
+    <BottomModal
       visible={visible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={onDismiss}
-      onPointerDown={onDismiss}
+      onDismiss={onDismiss}
       onShow={() => {
-        // expo go android
         const timeoutID = setTimeout(() => {
           textInputRef.current.focus();
           clearTimeout(timeoutID);
         }, 50);
       }}
     >
-      <View className={`${context && context.theme} flex-1 justify-end`}>
-        <View
-          onPointerDown={(e) => {
-            e.stopPropagation();
-          }}
-          className="mx-2 mb-3 px-4 py-4 gap-4 bg-layer-2 shadow-md elevation-md rounded-lg"
-        >
-          <TextInput
-            onSubmitEditing={submit}
-            onChangeText={setValue}
-            value={value}
-            ref={textInputRef}
-            className="px-1 py-1 outline-none text-base text-text-1"
-            placeholder="New task..."
-            placeholderTextColor={colors[themeColor]["placeholder-text"]}
-          />
+      <View className="mx-2 mb-3 px-4 py-4 gap-4 bg-layer-2 shadow-md elevation-md rounded-lg">
+        <TextInput
+          onSubmitEditing={submit}
+          onChangeText={setValue}
+          value={value}
+          ref={textInputRef}
+          className="px-1 py-1 outline-none text-base text-text-1"
+          placeholder="New task..."
+          placeholderTextColor={colors[themeColor]["placeholder-text"]}
+        />
 
-          <Pressable
-            onPress={submit}
-            disabled={value === ""}
-            className="ml-auto"
+        <Pressable onPress={submit} disabled={value === ""} className="ml-auto">
+          <Text
+            className={`font-bold ${value === "" ? "text-text-5" : "text-theme"}`}
           >
-            <Text
-              className={`font-bold ${value === "" ? "text-text-5" : "text-theme"}`}
-            >
-              Done
-            </Text>
-          </Pressable>
-        </View>
+            Done
+          </Text>
+        </Pressable>
       </View>
-    </Modal>
+    </BottomModal>
   );
 }
